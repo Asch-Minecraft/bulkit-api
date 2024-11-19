@@ -109,17 +109,19 @@ sourceSets.main.get().resources.srcDir(generateModMetadata)
 neoForge.ideSyncTask(generateModMetadata)
 
 publishing {
+    publications {
+        register<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+
     repositories {
-        val ghUsername = System.getenv("GITHUB_ACTOR")
-        val ghPassword = System.getenv("GITHUB_TOKEN")
-        print("ghUsername: ${ghUsername}")
-        print("ghPassword: ${ghPassword}")
         maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/FlorentTomi/bulkit-api")
             credentials {
-                username = ghUsername
-                password = ghPassword
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
