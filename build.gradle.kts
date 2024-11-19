@@ -112,14 +112,12 @@ publishing {
     repositories {
         val ghUsername = System.getenv("GITHUB_ACTOR")
         val ghPassword = System.getenv("GITHUB_TOKEN")
-        if (ghUsername != null && ghPassword != null) {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/FlorentTomi/bulkit-api")
-                credentials {
-                    username = ghUsername
-                    password = ghPassword
-                }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/FlorentTomi/bulkit-api")
+            credentials {
+                username = ghUsername
+                password = ghPassword
             }
         }
     }
