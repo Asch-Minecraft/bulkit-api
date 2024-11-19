@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.utils.extendsFrom
 
 plugins {
     `java-library`
+    `maven-publish`
     idea
     alias(libs.plugins.neoforged.moddev)
     kotlin("jvm") version "2.0.21"
@@ -107,18 +108,22 @@ var generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
 sourceSets.main.get().resources.srcDir(generateModMetadata)
 neoForge.ideSyncTask(generateModMetadata)
 
-//publishing {
-//    publications {
-//        register('mavenJava', MavenPublication) {
-//            from components.java
-//        }
-//    }
-//    repositories {
-//        maven {
-//            url "file://${project.projectDir}/repo"
-//        }
-//    }
-//}
+publishing {
+    repositories {
+        val ghUsername = System.getenv("GITHUB_ACTOR")
+        val ghPassword = System.getenv("GITHUB_TOKEN")
+        if (ghUsername != null && ghPassword != null) {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/FlorentTomi/bulkit-api")
+                credentials {
+                    username = ghUsername
+                    password = ghPassword
+                }
+            }
+        }
+    }
+}
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
