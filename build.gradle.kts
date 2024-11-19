@@ -118,7 +118,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/FlorentTomi/bulkit-api")
+            url = uri("https://maven.pkg.github.com/Asch-Minecraft/bulkit-api")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
