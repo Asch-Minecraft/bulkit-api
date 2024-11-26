@@ -34,11 +34,6 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
-
-    maven {
-        name = "Kotlin for Forge"
-        url = uri("https://thedarkcolour.github.io/KotlinForForge/")
-    }
 }
 
 base {
@@ -87,10 +82,6 @@ neoForge {
 configurations {
     val localRuntime = register("localRuntime")
     named("runtimeClasspath").extendsFrom(localRuntime)
-}
-
-dependencies {
-    implementation(libs.kotlinforforge)
 }
 
 val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
