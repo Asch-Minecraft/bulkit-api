@@ -4,10 +4,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.asch.bulkit.api.item.DiskItem;
-import org.asch.bulkit.api.registry.DiskItemRegister;
+import org.asch.bulkit.api.registry.DiskDataComponents;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
@@ -28,15 +27,20 @@ public class ResourceType<R> {
         private final @NotNull DeferredHolder<Item, DiskItem> diskHolder;
         private final @NotNull DeferredHolder<DataComponentType<?>, DataComponentType<Resource<R>>> resourceHolder;
 
-        public Builder(@NotNull String name, @NotNull Registry<R> registry, @NotNull DiskItemRegister diskItems, @NotNull DeferredRegister.DataComponents resourceDataComponents) {
+        public Builder(@NotNull String name, @NotNull Registry<R> registry, @NotNull DeferredRegister.Items disks, @NotNull DeferredRegister.DataComponents resources) {
             this.name = name;
-            this.diskHolder = diskItems.registerDisk(name, DiskItem::new);
-            this.resourceHolder = resourceDataComponents.registerComponentType(name, builder -> builder.persistent(Resource.codec(registry)).networkSynchronized(Resource.streamCodec(registry)).cacheEncoding());
+            this.diskHolder = disks.registerItem(name, Builder::createDisk);
+            this.resourceHolder = resources.registerComponentType(name, builder -> builder.persistent(Resource.codec(registry)).networkSynchronized(Resource.streamCodec(registry)).cacheEncoding());
         }
 
         @Override
         public @NotNull ResourceType<R> get() {
             return new ResourceType<>(name, diskHolder, resourceHolder);
+        }
+
+        private static DiskItem createDisk(Item.Properties props) {
+            props.component(DiskDataComponents.AMOUNT, 0L).component(DiskDataComponents.LOCKED, false).component(DiskDataComponents.VOID_EXCESS, false);
+            return new DiskItem(props);
         }
     }
 }
