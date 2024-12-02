@@ -1,4 +1,4 @@
-package org.asch.bulkit.api.registry;
+package org.asch.bulkit.api.registry.core;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -7,8 +7,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.asch.bulkit.api.BulkItApi;
+import org.asch.bulkit.api.item.DiskItem;
 
-public class CreativeModTabs {
+public class BulkItCreativeTabs {
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS;
 
     private static final CreativeModeTab.Builder DISKS_BUILDER;
@@ -17,7 +18,7 @@ public class CreativeModTabs {
     static {
         CREATIVE_TABS = DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, BulkItApi.ID);
 
-        DISKS_BUILDER = CreativeModeTab.builder().title(Component.literal("BulkIt! - Disks")).withSearchBar().displayItems(CreativeModTabs::disks);
+        DISKS_BUILDER = CreativeModeTab.builder().title(Component.literal("BulkIt! - Disks")).withSearchBar().displayItems(BulkItCreativeTabs::disks);
         DISKS = CREATIVE_TABS.register("disks", DISKS_BUILDER::build);
     }
 
@@ -26,6 +27,8 @@ public class CreativeModTabs {
     }
 
     private static void disks(CreativeModeTab.ItemDisplayParameters displayParameters, CreativeModeTab.Output output) {
-        BulkItRegistries.DISKS.getEntries().stream().map(DeferredHolder::get).forEach(output::accept);
+        BuiltInRegistries.ITEM.stream()
+                .filter(item -> item instanceof DiskItem)
+                .forEach(output::accept);
     }
 }
