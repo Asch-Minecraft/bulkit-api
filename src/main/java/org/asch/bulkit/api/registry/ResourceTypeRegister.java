@@ -5,7 +5,6 @@ import net.minecraft.core.component.DataComponentType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.asch.bulkit.api.registry.core.BulkItRegistries;
 import org.asch.bulkit.api.resource.Resource;
 import org.asch.bulkit.api.resource.ResourceType;
 import org.jetbrains.annotations.NotNull;
@@ -24,21 +23,18 @@ public class ResourceTypeRegister extends DeferredRegister<ResourceType<?>> {
             @NotNull String name,
             @NotNull Registry<R> registry,
             @NotNull UnaryOperator<ResourceType.Builder<R>> func) {
-        ResourceType.Builder<R> builder = new ResourceType.Builder<>(name, registry, registerResource(name, registry));
+
+        DeferredHolder<DataComponentType<?>, DataComponentType<Resource<R>>> dataComponentTypeHolder =
+                resourceRegister.registerComponentType(name, builder ->
+                        builder.persistent(Resource.codec(registry))
+                                .networkSynchronized(Resource.streamCodec(registry))
+                                .cacheEncoding());
+        ResourceType.Builder<R> builder = ResourceType.builder(name, dataComponentTypeHolder);
         return this.register(name, func.apply(builder));
     }
 
     public void register(@NotNull IEventBus modBus) {
         super.register(modBus);
         resourceRegister.register(modBus);
-    }
-
-    private <R> @NotNull DeferredHolder<DataComponentType<?>, DataComponentType<Resource<R>>> registerResource(
-            @NotNull String name,
-            @NotNull Registry<R> registry) {
-        return resourceRegister.registerComponentType(name, builder ->
-                builder.persistent(Resource.codec(registry))
-                        .networkSynchronized(Resource.streamCodec(registry))
-                        .cacheEncoding());
     }
 }

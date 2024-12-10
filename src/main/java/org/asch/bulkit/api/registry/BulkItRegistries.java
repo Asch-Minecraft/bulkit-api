@@ -1,9 +1,8 @@
-package org.asch.bulkit.api.registry.core;
+package org.asch.bulkit.api.registry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceKey;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.asch.bulkit.api.BulkItApi;
 import org.asch.bulkit.api.resource.ResourceType;
@@ -21,9 +20,4 @@ public class BulkItRegistries {
             new RegistryBuilder<>(Keys.RESOURCES).sync(true).create();
     public static final @NotNull Registry<ResourceType<?>> RESOURCE_TYPES =
             new RegistryBuilder<>(Keys.RESOURCE_TYPES).sync(true).create();
-
-    public static void register(NewRegistryEvent event) {
-        event.register(RESOURCES);
-        event.register(RESOURCE_TYPES);
-    }
 }
