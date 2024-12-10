@@ -1,20 +1,14 @@
 package org.asch.bulkit.api;
 
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
+import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.registries.RegistryBuilder;
-import org.asch.bulkit.api.resource.ResourceType;
+import org.slf4j.Logger;
 
 public class BulkItApi {
     public static String ID = "bulkit";
+    public static Logger LOGGER = LogUtils.getLogger();
 
-    public static ResourceKey<Registry<ResourceType<?>>> RESOURCE_TYPE_REGISTRY_NAME =
-            ResourceKey.createRegistryKey(rl("resource_types"));
-    public static Registry<ResourceType<?>> RESOURCE_TYPE_REGISTRY =
-            new RegistryBuilder<>(RESOURCE_TYPE_REGISTRY_NAME).sync(true).create();
-
-    public static ResourceLocation rl(String path) {
+    public static ResourceLocation location(String path) {
         return ResourceLocation.fromNamespaceAndPath(ID, path);
     }
 }
