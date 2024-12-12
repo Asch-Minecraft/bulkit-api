@@ -2,7 +2,7 @@ package org.asch.bulkit.api.resource;
 
 import net.minecraft.world.item.ItemStack;
 import org.asch.bulkit.api.capability.IDiskHandler;
-import org.asch.bulkit.api.item.DiskItem;
+import org.asch.bulkit.api.item.BaseDiskItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ public class ResourceHandler<R> {
 
     public ResourceHandler(@NotNull ItemStack disk, @NotNull Function<@Nullable Resource<R>, Long> maxStackSizeSupplier) {
         this.disk = disk;
-        if (!(this.disk.getItem() instanceof DiskItem)) {
+        if (!(this.disk.getItem() instanceof BaseDiskItem)) {
             throw new IllegalArgumentException("invalid itemstack item (must be DiskItem)");
         }
 
